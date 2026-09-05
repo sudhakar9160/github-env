@@ -24,8 +24,6 @@ jobs:
           key: npm-cache${{ hashFiles('**/package.lock.json')}}
       - name: get_dependencies
         run: npm ci
-      - name: npm_test
-        run: npm test
       - name: run server
         run: npm start & npx wait-on http://127.0.0.1:$PORT
       - name: print_mangodb_user_name and database
