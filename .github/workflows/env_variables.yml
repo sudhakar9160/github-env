@@ -1,0 +1,42 @@
+name: env_variables
+on: push
+env:
+  MONGODB_DB_NAME: MANGO_DB
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      MONGODB_CLUSTER_ADDRESS: sudhakar-cluster.dndyfzc.mongodb.net
+      MONGODB_USERNAME: sudhakaryn1995_db_user
+      MONGODB_PASSWORD: 80kjqNETIbWHzlvr
+      PORT: 8080
+    steps:
+      - name: get_code
+        uses: actions/checkout@v4
+      - name: get_node_installed
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: cache_npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-cache${{ hashFiles('**/package.lock.json')}}
+      - name: get_dependencies
+        run: npm ci
+      - name: npm_test
+        run: npm run test
+      - name: run server
+        run: npm start & npx wait-on http://127.0.0.1:$PORT
+      - name: print_mangodb_user_name and database
+        run: |
+          echo "user_name:${{env.MONGODB_USERNAME}} and database: ${{env.MONGODB_DB_NAME}}"
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print_user_name_and_managodb_name
+        run: |
+          echo "user_name=${{ env.MONGODB_USERNAME }}"
+          echo "db_name=${{env.MONGODB_DB_NAME}}"
+
+  
