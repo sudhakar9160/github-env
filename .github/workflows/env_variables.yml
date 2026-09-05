@@ -32,6 +32,7 @@ jobs:
         run: |
           echo "user_name:${{env.MONGODB_USERNAME}} and database: ${{env.MONGODB_DB_NAME}}"
   deployment:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: print_user_name_and_managodb_name
